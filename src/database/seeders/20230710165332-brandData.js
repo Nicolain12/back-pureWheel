@@ -118,8 +118,8 @@ module.exports = {
       },
       {
         id: 17,
-        name: 'Land Rover',
-        logo: 'Land Rover.png',
+        name: 'LandRover',
+        logo: 'LandRover.png',
         createdAt: new Date(),
         updatedAt: new Date()
       },
