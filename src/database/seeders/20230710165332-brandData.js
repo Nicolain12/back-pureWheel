@@ -7,167 +7,233 @@ module.exports = {
       {
         id: 1,
         name: 'Toyota',
-        logo: 'Toyota.png'
+        logo: 'Toyota.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 2,
         name: 'Volkswagen',
-        logo: 'Volkswagen.png'
+        logo: 'Volkswagen.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 3,
         name: 'Ford',
-        logo: 'Ford.png'
+        logo: 'Ford.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 4,
         name: 'Chevrolet',
-        logo: 'Chevrolet.png'
+        logo: 'Chevrolet.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 5,
         name: 'Honda',
-        logo: 'Honda.png'
+        logo: 'Honda.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 6,
         name: 'BMW',
-        logo: 'BMW.png'
+        logo: 'BMW.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 7,
         name: 'Mercedes-Benz',
-        logo: 'Mercedes-Benz.png'
+        logo: 'Mercedes-Benz.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 8,
         name: 'Audi',
-        logo: 'Audi.png'
+        logo: 'Audi.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 9,
         name: 'Nissan',
-        logo: 'Nissan.png'
+        logo: 'Nissan.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 10,
         name: 'Hyundai',
-        logo: 'Hyundai.png'
+        logo: 'Hyundai.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 11,
         name: 'Kia',
-        logo: 'Kia.png'
+        logo: 'Kia.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 12,
         name: 'Tesla',
-        logo: 'Tesla.png'
+        logo: 'Tesla.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 13,
         name: 'Subaru',
-        logo: 'Subaru.png'
+        logo: 'Subaru.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 14,
         name: 'Volvo',
-        logo: 'Volvo.png'
+        logo: 'Volvo.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 15,
         name: 'Mazda',
-        logo: 'Mazda.png'
+        logo: 'Mazda.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 16,
         name: 'Jaguar',
-        logo: 'Jaguar.png'
+        logo: 'Jaguar.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 17,
         name: 'Land Rover',
-        logo: 'Land Rover.png'
+        logo: 'Land Rover.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 18,
         name: 'Porsche',
-        logo: 'Porsche.png'
+        logo: 'Porsche.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 19,
         name: 'Lexus',
-        logo: 'Lexus.png'
+        logo: 'Lexus.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 20,
         name: 'Fiat',
-        logo: 'Fiat.png'
+        logo: 'Fiat.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 21,
         name: 'Peugeot',
-        logo: 'Peugeot.png'
+        logo: 'Peugeot.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 22,
         name: 'Renault',
-        logo: 'Renault.png'
+        logo: 'Renault.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 23,
         name: 'Mitsubishi',
-        logo: 'Mitsubishi.png'
+        logo: 'Mitsubishi.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 24,
         name: 'Jeep',
-        logo: 'Jeep.png'
+        logo: 'Jeep.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 25,
         name: 'Mini',
-        logo: 'Mini.png'
+        logo: 'Mini.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 26,
         name: 'Chrysler',
-        logo: 'Chrysler.png'
+        logo: 'Chrysler.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 27,
         name: 'Dodge',
-        logo: 'Dodge.png'
+        logo: 'Dodge.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 28,
         name: 'GMC',
-        logo: 'GMC.png'
+        logo: 'GMC.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 29,
         name: 'Buick',
-        logo: 'Buick.png'
+        logo: 'Buick.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 30,
         name: 'Cadillac',
-        logo: 'Cadillac.png'
+        logo: 'Cadillac.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 31,
         name: 'Ferrari',
-        logo: 'Ferrari.png'
+        logo: 'Ferrari.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 32,
         name: 'Lamborghini',
-        logo: 'Lamborghini.png'
+        logo: 'Lamborghini.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 33,
         name: 'Bugatti',
-        logo: 'Bugatti.png'
+        logo: 'Bugatti.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ]);
   },
