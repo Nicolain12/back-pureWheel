@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "database": "npx sequelize-cli db:create",
+    "migrations": "npx sequelize-cli db:migrate",
+    "seeders": "npx sequelize-cli db:seed:all"
   },
   "keywords": [],
   "author": "",
