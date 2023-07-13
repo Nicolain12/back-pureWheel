@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const fs = require('fs');
 const multer = require('multer');
 const path = require('path');
 const usersAPI = require('../controllers/usersController')

@@ -1,4 +1,6 @@
+const { log } = require('console');
 const db = require('../database/models')
+const fs = require('fs');
 const Cars = db.Car
 const Brands = db.Brand
 const Models = db.CarModel
@@ -12,7 +14,9 @@ module.exports = {
             }
         }
         try {
-            const cars = await Cars.findAll()
+            const cars = await Cars.findAll({
+                include: [{ association: 'brand' }, { association: 'model' }]
+            })
             response.info.total = cars.length
             response.data = cars
             res.json(response)
@@ -48,7 +52,9 @@ module.exports = {
             }
         }
         try {
-            const models = await Models.findAll()
+            const models = await Models.findAll({
+                include: [{ association: 'brand' }]
+            })
             response.info.total = models.length
             response.data = models
             res.json(response)
@@ -135,7 +141,7 @@ module.exports = {
             res.json(response)
         }
     },
-    //Create
+    //Create✔︎
     createCar: async (req, res) => {
         let response = {
             info: {
@@ -144,7 +150,7 @@ module.exports = {
         }
         try {
             const newCar = {
-                image: req.files.map((file) => file.filename),
+                images: JSON.stringify(req.files.map((file) => file.filename)),
                 year: req.body.year,
                 carModel_id: req.body.carModel_id,
                 brand_id: req.body.brand_id,
@@ -156,6 +162,7 @@ module.exports = {
                 damage: req.body.damage,
                 onSale: req.body.onSale
             }
+            if (newCar.onSale) newCar.price = newCar.price - (newCar.price * newCar.onSale / 100)
             const addingCar = await Cars.create(newCar)
             response.data = addingCar
             res.json(response)
@@ -174,20 +181,17 @@ module.exports = {
             }
         }
         try {
-            //if(admins){
-            const logoFile = req.files['logo'][0]
-            const bannerFile = req.files['banner'][0]
-
+            const logoFile = req.files['logo'] ? req.files['logo'][0] : null
+            const bannerFile = req.files['banner'] ? req.files['banner'][0] : null
             const newBrand = {
                 name: req.body.name,
                 logo: logoFile.filename,
-                banner: bannerFile.filename,
+                banner: bannerFile ? bannerFile.filename : null,
             }
 
             const addingBrand = await Brands.create(newBrand)
             response.data = addingBrand
             res.json(response)
-            //} else {Not allowed}
         } catch (e) {
             response.info.status = 400
             response.info.msg = e.message
@@ -201,7 +205,6 @@ module.exports = {
             }
         }
         try {
-            //if(admins){
             const newModel = {
                 name: req.body.name,
                 brand_id: req.body.brand_id
@@ -209,7 +212,6 @@ module.exports = {
             const addingModel = await Models.create(newModel)
             response.data = addingModel
             res.json(response)
-            //} else {Not allowed}
         }
         catch (e) {
             response.info.status = 400
@@ -344,12 +346,12 @@ module.exports = {
         }
         try {
             //if(admins){
-                const newModel = {
-                    name: req.body.name
-                }
-                const modelNew = await Models.update(newModel, { where: { id: req.params.id } })
-                response.data = modelNew
-                res.json(response)
+            const newModel = {
+                name: req.body.name
+            }
+            const modelNew = await Models.update(newModel, { where: { id: req.params.id } })
+            response.data = modelNew
+            res.json(response)
             //} else {Not allowed}
         } catch (e) {
             response.info.status = 400
