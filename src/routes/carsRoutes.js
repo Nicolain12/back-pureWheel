@@ -9,7 +9,8 @@ const auth = require('../middlewares/authentication.js')
 //car
 const storageCar = multer.diskStorage({
     destination: function (req, file, cb) {
-        const userId = req.token.finded.id;
+        // const userId = req.token.finded.id;
+        const userId = 2;
         const folder = path.join(__dirname, `../../public/images/cars/user_${userId}`);
         fs.mkdirSync(folder, { recursive: true });
         cb(null, folder);

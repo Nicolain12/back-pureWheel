@@ -48,7 +48,7 @@ module.exports = {
       },
       {
         id: 4,
-        images: JSON.stringify(['bugatti1.webp','bugatti2.webp','bugatti3.webp','bugatti4.webp','bugatti5.webp','bugatti6.webp','bugatti7.webp']),
+        images: JSON.stringify(['bugatti1.webp','bugatti2.webp','bugatti3.webp','bugatti4.webp','bugatti5.webp','bugatti6.webp']),
         year: 2023,
         carModel_id: 541,
         brand_id: 33,
