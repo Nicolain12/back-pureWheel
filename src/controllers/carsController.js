@@ -141,7 +141,7 @@ module.exports = {
             res.json(response)
         }
     },
-    //Create✔︎
+    //Create ✔︎
     createCar: async (req, res) => {
         let response = {
             info: {
@@ -154,8 +154,7 @@ module.exports = {
                 year: req.body.year,
                 carModel_id: req.body.carModel_id,
                 brand_id: req.body.brand_id,
-                // user_id: req.token.finded.id,
-                user_id: 2,
+                user_id: req.token.finded.id,
                 km: req.body.km,
                 color: req.body.color,
                 description: req.body.description,
@@ -221,7 +220,7 @@ module.exports = {
         }
 
     },
-    //Update
+    //Update ✔︎
     updateCar: async (req, res) => {
         let response = {
             info: {
@@ -229,12 +228,9 @@ module.exports = {
             }
         }
         try {
-            const oldImgs = req.body.oldImages
-            const rmvImgs = req.body.removeImages
+            const oldImgs = JSON.parse(req.body.oldImages)
+            const rmvImgs = JSON.parse(req.body.removeImages)
             const newCar = {
-                year: req.body.year,
-                carModel_id: req.body.carModel_id,
-                brand_id: req.body.brand_id,
                 km: req.body.km,
                 color: req.body.color,
                 description: req.body.description,
@@ -242,51 +238,35 @@ module.exports = {
                 damage: req.body.damage,
                 onSale: req.body.onSale,
             }
+            if (newCar.onSale) newCar.price = newCar.price - (newCar.price * newCar.onSale / 100)
             if (oldImgs) {
                 const newCarImg = []
-                if (typeof oldImgs === 'object') {
-                    oldImgs.forEach(element => {
-                        newCarImg.push(element)
+                oldImgs.forEach(element => {
+                    newCarImg.push(element)
+                });
+                if (req.files) {
+                    req.files.forEach(file => {
+                        newCarImg.push(file.filename)
                     });
-                    if (req.files) {
-                        req.files.forEach(file => {
-                            newCarImg.push(file.filename)
-                        });
-                    }
-                    newCar.image = newCarImg
                 }
-                if (typeof oldImgs === 'string') {
-                    newCarImg.push(oldImgs)
-                    if (req.files) {
-                        req.files.forEach(file => {
-                            newCarImg.push(file.filename)
-                        });
-                    }
-                    newCar.image = newCarImg
-                }
+                newCar.images = JSON.stringify(newCarImg)
             } else {
-                newCar.image = req.files.map((file) => file.filename)
+                newCar.image = JSON.stringify(req.files.map((file) => file.filename))
             }
             if (rmvImgs) {
-                if (typeof rmvImgs === 'object') {
-                    rmvImgs.forEach(element => {
-                        fs.unlink(`public/images/cars/user_${req.token.finded.id}/${element}`, (err) => {
-                            if (err) {
-                                console.error(err);
-                            }
-                        });
-                    });
-                }
-                if (typeof rmvImgs === 'string') {
-                    fs.unlink(`public/images/cars/user_${req.token.finded.id}/${rmvImgs}`, (err) => {
+                rmvImgs.forEach(element => {
+                    fs.unlink(`public/images/cars/user_${req.token.finded.id}/${element}`, (err) => {
                         if (err) {
                             console.error(err);
                         }
                     });
-                }
+                });
             }
-            const edited = await Cars.update(newCar, { where: { id: req.params.id } })
-            response.data = edited
+            await Cars.update(newCar, { where: { id: req.params.id } })
+            const car = await Cars.findByPk(req.params.id, {
+                include: [{ association: 'brand' }, { association: 'model' }]
+            })
+            response.data = car
             res.json(response)
         }
         catch (e) {
@@ -302,9 +282,8 @@ module.exports = {
             }
         }
         try {
-            //if(admins){
-            const logoFile = req.files['logo'][0]
-            const bannerFile = req.files['banner'][0]
+            const logoFile = req.files['logo'] ? req.files['logo'][0] : null
+            const bannerFile = req.files['banner'] ? req.files['banner'][0] : null
             const newBrand = {
                 name: req.body.name,
             }
@@ -322,17 +301,27 @@ module.exports = {
             if (newBrand.banner) {
                 const previousBrand = await Brands.findByPk(req.params.id)
                 const previousImage = previousBrand.dataValues.banner
-                fs.unlink(`public/images/banners/${previousImage}`, (err) => {
-                    if (err) {
-                        console.error(err);
-                    }
-                });
-
+                if (previousImage) {
+                    fs.unlink(`public/images/banners/${previousImage}`, (err) => {
+                        if (err) {
+                            console.error(err);
+                        }
+                    });
+                }
             }
-            const brandNew = await Brands.update(newBrand, { where: { id: req.params.id } })
-            response.data = brandNew
-            res.json(response)
-            //} else {Not allowed}
+            await Brands.update(newBrand, { where: { id: req.params.id } })
+            const brand = await Brands.findByPk(req.params.id)
+            if (brand) {
+                response.data = brand
+                const carsIncluded = await Cars.findAll({
+                    where: { brand_id: brand.dataValues.id }
+                })
+                if (carsIncluded) {
+                    response.info.cars = carsIncluded.length
+                    response.info.carsIncluded = carsIncluded
+                }
+                res.json(response)
+            }
         } catch (e) {
             response.info.status = 400
             response.info.msg = e.message
@@ -346,21 +335,30 @@ module.exports = {
             }
         }
         try {
-            //if(admins){
             const newModel = {
                 name: req.body.name
             }
             const modelNew = await Models.update(newModel, { where: { id: req.params.id } })
             response.data = modelNew
+            const model = await Models.findByPk(req.params.id, {
+                include: [{ association: 'brand' }]
+            })
+            response.data = model
+            const carsIncluded = await Cars.findAll({
+                where: { carModel_id: model.dataValues.id }
+            })
+            if (carsIncluded) {
+                response.info.cars = carsIncluded.length
+                response.info.carsIncluded = carsIncluded
+            }
             res.json(response)
-            //} else {Not allowed}
         } catch (e) {
             response.info.status = 400
             response.info.msg = e.message
             res.json(response)
         }
     },
-    //Delete
+    //Delete ✔︎
     deleteCar: async (req, res) => {
         let response = {
             info: {
