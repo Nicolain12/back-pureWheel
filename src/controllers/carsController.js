@@ -6,7 +6,29 @@ const Brands = db.Brand
 const Models = db.CarModel
 
 module.exports = {
-    //list ✔︎
+    carsByUser: async (id) => {
+        let response = {
+            info: {
+                status: 200,
+            }
+        }
+        try {
+            const carsFinded = await Cars.findAll({
+                include: [{ association: 'brand' }, { association: 'model' }]
+            })
+            const cars = []
+            carsFinded.forEach(element => { element.user_id == id ? cars.push(element) : null })
+            response.info.total = cars.length
+            response.data = cars
+            return response
+        }
+        catch (e) {
+            response.info.status = 400
+            response.info.msg = e.message
+            return response
+        }
+    },
+    //list
     carsList: async (req, res) => {
         let response = {
             info: {
@@ -65,7 +87,7 @@ module.exports = {
             res.json(response)
         }
     },
-    //ByPk ✔︎
+    //ByPk
     carByPk: async (req, res) => {
         let response = {
             info: {
@@ -141,7 +163,7 @@ module.exports = {
             res.json(response)
         }
     },
-    //Create ✔︎
+    //Create
     createCar: async (req, res) => {
         let response = {
             info: {
@@ -220,7 +242,7 @@ module.exports = {
         }
 
     },
-    //Update ✔︎
+    //Update
     updateCar: async (req, res) => {
         let response = {
             info: {
@@ -358,7 +380,7 @@ module.exports = {
             res.json(response)
         }
     },
-    //Delete ✔︎
+    //Delete
     deleteCar: async (req, res) => {
         let response = {
             info: {

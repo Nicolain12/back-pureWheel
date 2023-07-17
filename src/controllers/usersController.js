@@ -1,7 +1,8 @@
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
-const db = require('../database/models')
+const carsController = require('./carsController.js')
+const db = require('../database/models');
 const Users = db.User
 module.exports = {
     // List
@@ -34,10 +35,13 @@ module.exports = {
         try {
             const users = await Users.findByPk(req.params.id)
             response.data = users
+            const carsApi = await carsController.carsByUser(req.params.id)
+            response.info.userCars = carsApi.data
             res.json(response)
         }
         catch (e) {
             response.info.status = 400
+            console.error(e);
             response.info.msg = e.message
             res.json(response)
         }
@@ -51,7 +55,7 @@ module.exports = {
         }
         try {
             const user = {
-                image: req.files.filename ? req.files.filename : 'default.jpeg',
+                image: req.file ? req.file.filename : 'default.jpeg',
                 name: req.body.name,
                 surname: req.body.surname,
                 email: req.body.email,
@@ -59,18 +63,13 @@ module.exports = {
                 phoneNumber: req.body.phoneNumber,
                 password: bcrypt.hashSync(req.body.password, 10),
             }
-            const isInDb = await Users.findOne({
-                $or: [
-                    { email: req.body.email },
-                    { phone: req.body.phoneNumber }
-                ]
+            const errorRegister = []
+            const users = await Users.findAll()
+            users.forEach(element => {
+                if(element.dataValues.email === user.email) errorRegister.push('email')
+                if(element.dataValues.phoneNumber === user.phoneNumber) errorRegister.push('phoneNumber')
             });
-
-
-            if (isInDb.length > 0) {
-                const errorRegister = []
-                if (isInDb.dataValues.email === user.email) errorRegister.push('email')
-                if (isInDb.dataValues.phoneNumber === user.phoneNumber) errorRegister.push('phoneNumber')
+            if (errorRegister.length > 0) { 
                 return res.status(409).json({ status: 409, error: 'The user already exists', inputError: errorRegister })
             } else {
                 const registedUser = await Users.create(user)
@@ -101,7 +100,7 @@ module.exports = {
             }
         }
         try {
-            let user = {
+            const user = {
                 email: req.body.email,
                 password: req.body.password
             }
@@ -113,7 +112,7 @@ module.exports = {
             });
             const finded = userInDb.dataValues
             if (finded) {
-                let passwordCheck = bcrypt.compareSync(user.password, finded.password)
+                const passwordCheck = bcrypt.compareSync(user.password, finded.password)
                 if (passwordCheck) {
                     if (req.body.remember) {
                         delete finded.password
@@ -162,10 +161,10 @@ module.exports = {
         }
         try {
             let newData = {
-                name: "Nicolas",
-                surname: "Lain",
-                email: "nicolas@mail.com ",
-                phoneNumber: "[[\"+54\"],[\"1133615533\"]]",
+                name: req.body.name,
+                surname: req.body.surname,
+                email: req.body.email,
+                phoneNumber: req.body.phoneNumber,
             }
             if (req.file != undefined) newData.image = req.file.filename
             if (newData.image) {
@@ -179,11 +178,13 @@ module.exports = {
                     });
                 }
             }
-            const newUser = await Users.update(newData, { where: { id: req.params.id } })
+            await Users.update(newData, { where: { id: req.params.id } })
+            const newUser = await Users.findByPk(req.params.id)
             response.data = newUser
             res.json(response)
 
         } catch (e) {
+            console.error(e)
             response.info.status = 400
             response.info.msg = e.message
             res.json(response)
