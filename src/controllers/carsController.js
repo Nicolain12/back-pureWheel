@@ -120,8 +120,10 @@ module.exports = {
             if (brand) {
                 response.data = brand
                 const carsIncluded = await Cars.findAll({
-                    where: { brand_id: brand.dataValues.id }
-                })
+                    where: { brand_id: brand.dataValues.id },
+                    include: [{ association: 'model' }] 
+                });
+                console.log(carsIncluded);
                 if (carsIncluded) {
                     response.info.cars = carsIncluded.length
                     response.info.carsIncluded = carsIncluded
@@ -410,17 +412,21 @@ module.exports = {
             }
         }
         try {
+
+            const modelsDestroy = await Models.destroy({ where: { brand_id: req.params.id } });
             const destroy = await Brands.destroy({
                 where: {
                     id: req.params.id
                 }
             })
             response.data = destroy
+            response.info.modelsDestroy = modelsDestroy
             res.json(response)
 
 
         } catch (e) {
             response.info.status = 400
+            console.error(e);
             response.info.msg = e.message
             res.json(response)
         }

@@ -3,6 +3,8 @@ const router = express.Router()
 const multer = require('multer');
 const path = require('path');
 const usersAPI = require('../controllers/usersController')
+const auth = require('../middlewares/authentication.js')
+
 //MULTER
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -29,5 +31,7 @@ router.put('/update/:id', upload.single('fileEdit'), usersAPI.update)
 // Delete user
 router.delete('/delete/:id', usersAPI.delete)
 
+// Get User By Token
+router.get('/token/byId', auth,usersAPI.getByToken)
 
 module.exports = router

@@ -107,7 +107,7 @@ module.exports = {
             const userInDb = await Users.findOne({
                 $or: [
                     { email: req.body.email },
-                    { phone: req.body.email }
+                    { phone: JSON.stringify([['+54'], [req.body.email]])}
                 ]
             });
             const finded = userInDb.dataValues
@@ -199,6 +199,7 @@ module.exports = {
             }
         }
         try {
+            await Cars.destroy({ where: { user_id: req.params.id } });
             const destroy = await Users.destroy({
                 where: {
                     id: req.params.id
@@ -214,5 +215,24 @@ module.exports = {
             res.json(response)
         }
 
+    },
+
+    //UserByToken
+    getByToken: (req, res) => {
+        let response = {
+            info: {
+                status: 200
+            }
+        }
+        if (req.token) {
+            response.data = req.token.finded
+            return res.json(response)
+        } else {
+            response.info.status = 400
+            response.info.msg = 'User not found'
+            return res.json(response)
+        }
+
     }
+
 }
