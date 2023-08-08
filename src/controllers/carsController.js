@@ -1,5 +1,6 @@
-const { log } = require('console');
 const db = require('../database/models')
+const axios = require('axios');
+const PORT = require('../app')
 const fs = require('fs');
 const Cars = db.Car
 const Brands = db.Brand
@@ -56,10 +57,23 @@ module.exports = {
             }
         }
         try {
-            const brands = await Brands.findAll()
-            response.info.total = Brands.length
-            response.data = brands
-            res.json(response)
+            const brands = await Brands.findAll();
+        
+            const brandsWithCarsPromises = brands.map(async (brand) => {
+                const response = await axios.get(`http://localhost:3000/cars/brands/${brand.id}`);
+                if (response.data.info.cars > 0) {
+                    return brand.dataValues;
+                }
+                return null;
+            });
+            
+            const brandsWithCars = await Promise.all(brandsWithCarsPromises);
+            const validBrandsWithCars = brandsWithCars.filter(brand => brand !== null);
+    
+            response.info.total = validBrandsWithCars.length;
+            response.data = validBrandsWithCars;
+            console.log(response.data);
+            res.json(response);
         }
         catch (e) {
             response.info.status = 400
@@ -123,7 +137,6 @@ module.exports = {
                     where: { brand_id: brand.dataValues.id },
                     include: [{ association: 'model' }] 
                 });
-                console.log(carsIncluded);
                 if (carsIncluded) {
                     response.info.cars = carsIncluded.length
                     response.info.carsIncluded = carsIncluded

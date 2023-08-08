@@ -18,7 +18,7 @@ app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`)
     console.log('http://localhost:3000')
 }) 
-
+module.exports = PORT
 //Routes
 app.use('/users', usersApi)
 app.use('/cars', carsApi)
