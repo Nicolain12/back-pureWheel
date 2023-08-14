@@ -23,26 +23,26 @@ const uploadCar = multer({ storage: storageCar });
 //Brand
 const storageBrand = multer.diskStorage({
     destination: function (req, file, cb) {
-        if(file.fieldname === 'logo'){
-        const folder = path.join(__dirname, `../../public/images/brands`);
-        cb(null, folder);
-    }
-    if(file.fieldname === 'banner'){
-        const folder = path.join(__dirname, `../../public/images/banners`);
-        cb(null, folder);
-    }
-    
+        if (file.fieldname === 'logo') {
+            const folder = path.join(__dirname, `../../public/images/brands`);
+            cb(null, folder);
+        }
+        if (file.fieldname === 'banner') {
+            const folder = path.join(__dirname, `../../public/images/banners`);
+            cb(null, folder);
+        }
+
     },
     filename: function (req, file, cb) {
-        if(file.fieldname === 'logo'){
+        if (file.fieldname === 'logo') {
             const imageName = `${Date.now()}-${req.body.name}${path.extname(file.originalname)}`
-        cb(null, imageName);
+            cb(null, imageName);
         }
-       if(file.fieldname === 'banner'){
-        const imageName = `${Date.now()}-banner-${req.body.name}${path.extname(file.originalname)}`
-        cb(null, imageName);
-       }
-        
+        if (file.fieldname === 'banner') {
+            const imageName = `${Date.now()}-banner-${req.body.name}${path.extname(file.originalname)}`
+            cb(null, imageName);
+        }
+
     }
 });
 const uploadBrand = multer({ storage: storageBrand });
@@ -77,9 +77,16 @@ router.put('/models/update/:id', carsAPI.updateModel)
 //************* Delete ************* 
 router.delete('/delete/:id', carsAPI.deleteCar)
 // Brand
-router.delete('/brands/delete/:id', carsAPI.deleteBrand);
+router.delete('/brands/delete/:id', carsAPI.deleteBrand)
 //Model
 router.delete('/models/delete/:id', carsAPI.deleteModel)
+//************* Other ************* 
+// Get Favss By id
+router.get('/favss/:id', carsAPI.userFavss)
+// Add Car To Favss 
+router.post('/favss/add/:id', carsAPI.userFavssAdd)
+// Remove Car From Favss 
+router.delete('/favss/remove/:id', carsAPI.userFavssRemove)
 
 module.exports = router
 

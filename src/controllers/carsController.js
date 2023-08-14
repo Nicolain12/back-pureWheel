@@ -5,6 +5,7 @@ const fs = require('fs');
 const Cars = db.Car
 const Brands = db.Brand
 const Models = db.CarModel
+const Favss = db.Fav
 
 module.exports = {
     carsByUser: async (id) => {
@@ -58,7 +59,7 @@ module.exports = {
         }
         try {
             const brands = await Brands.findAll();
-        
+
             const brandsWithCarsPromises = brands.map(async (brand) => {
                 const response = await axios.get(`http://localhost:3000/cars/brands/${brand.id}`);
                 if (response.data.info.cars > 0) {
@@ -66,10 +67,10 @@ module.exports = {
                 }
                 return null;
             });
-            
+
             const brandsWithCars = await Promise.all(brandsWithCarsPromises);
             const validBrandsWithCars = brandsWithCars.filter(brand => brand !== null);
-    
+
             response.info.total = validBrandsWithCars.length;
             response.data = validBrandsWithCars;
             console.log(response.data);
@@ -135,7 +136,7 @@ module.exports = {
                 response.data = brand
                 const carsIncluded = await Cars.findAll({
                     where: { brand_id: brand.dataValues.id },
-                    include: [{ association: 'model' }] 
+                    include: [{ association: 'model' }]
                 });
                 if (carsIncluded) {
                     response.info.cars = carsIncluded.length
@@ -459,6 +460,82 @@ module.exports = {
             response.data = destroy
             res.json(response)
 
+
+        } catch (e) {
+            response.info.status = 400
+            response.info.msg = e.message
+            res.json(response)
+        }
+    },
+    // Get Favss By id
+    userFavss: async (req, res) => {
+        let response = {
+            info: {
+                status: 200
+            }
+        }
+        try {
+            const favss = await Favss.findAll({
+                where: { user_id: req.params.id }
+            });
+            const carArr = favss.map(async (element) => {
+                const carInfo = await Cars.findByPk(element.dataValues.car_id)
+                if(carInfo){
+                    return carInfo.dataValues;
+                }
+                return null;
+            })
+
+            const carsList = await Promise.all(carArr);
+            const validCarList = carsList.filter(brand => brand !== null);
+
+            console.log(validCarList);
+            response.info.total = validCarList.length
+            response.data = validCarList
+            res.json(response)
+        } catch (e) {
+            response.info.status = 400
+            response.info.msg = e.message
+            res.json(response)
+        }
+    },
+    // Add Car To Favss 
+    userFavssAdd: async (req, res) => {
+        let response = {
+            info: {
+                status: 200
+            }
+        }
+        try {
+            const addFav = await Favss.create({user_id: req.params.id, car_id: req.body.car_id})
+            if(addFav){
+                response.data = addFav
+                return res.json(response)
+            }
+        } catch (e) {
+            response.info.status = 400
+            response.info.msg = e.message
+            res.json(response)
+        }
+    },
+    // Remove Car From Favss 
+    userFavssRemove: async (req, res) => {
+        let response = {
+            info: {
+                status: 200
+            }
+        }
+        try {
+              const rmvFav = await Favss.destroy({
+                where: {
+                  user_id: req.params.id,
+                  car_id: req.body.car_id,
+                },
+              })
+            if(rmvFav){
+                response.data = rmvFav
+                return res.json(response)
+            }
 
         } catch (e) {
             response.info.status = 400

@@ -30,8 +30,8 @@ router.post('/loggin', usersAPI.loggin)
 router.put('/update/:id', upload.single('fileEdit'), usersAPI.update)
 // Delete user
 router.delete('/delete/:id', usersAPI.delete)
-
 // Get User By Token
-router.get('/token/byId', auth,usersAPI.getByToken)
+router.get('/token/byId', auth ,usersAPI.getByToken)
+
 
 module.exports = router
