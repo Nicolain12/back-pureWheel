@@ -295,7 +295,7 @@ module.exports = {
       { id: 279, name: 'Venue', brand_id: 10, createdAt: new Date(), updatedAt: new Date() },
       { id: 280, name: 'Nexo', brand_id: 10, createdAt: new Date(), updatedAt: new Date() },
       { id: 281, name: 'Ioniq Electric', brand_id: 10, createdAt: new Date(), updatedAt: new Date() },
-      { id: 282, name: 'Genesis G70', brand_id: 10, createdAt: new Date(), updatedAt: new Date() },
+      { id: 282, name: 'Genesis Coupe', brand_id: 10, createdAt: new Date(), updatedAt: new Date() },
       { id: 283, name: 'Genesis G80', brand_id: 10, createdAt: new Date(), updatedAt: new Date() },
       { id: 284, name: 'Genesis G90', brand_id: 10, createdAt: new Date(), updatedAt: new Date() },
       { id: 285, name: 'Venue', brand_id: 10, createdAt: new Date(), updatedAt: new Date() },
@@ -586,7 +586,9 @@ module.exports = {
       { id: 547, name: 'Type 41 Royale', brand_id: 33, createdAt: new Date(), updatedAt: new Date() },
       { id: 548, name: 'Type 57', brand_id: 33, createdAt: new Date(), updatedAt: new Date() },
       { id: 549, name: 'Type 55', brand_id: 33, createdAt: new Date(), updatedAt: new Date() },
-      { id: 550, name: 'La Voiture Noire', brand_id: 33, createdAt: new Date(), updatedAt: new Date() }
+      { id: 550, name: 'La Voiture Noire', brand_id: 33, createdAt: new Date(), updatedAt: new Date() },
+      // Bugatti
+      { id: 542, name: '3500', brand_id: 34, createdAt: new Date(), updatedAt: new Date() },
     ]);
   },
 

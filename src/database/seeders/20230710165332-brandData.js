@@ -234,6 +234,13 @@ module.exports = {
         logo: 'Bugatti.png',
         createdAt: new Date(),
         updatedAt: new Date()
+      },
+      {
+        id: 34,
+        name: 'Ram',
+        logo: 'ram.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ]);
   },
