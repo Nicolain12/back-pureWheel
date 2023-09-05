@@ -186,8 +186,8 @@ module.exports = {
       { id: 174, name: 'X4 M', brand_id: 6, createdAt: new Date(), updatedAt: new Date() },
       { id: 175, name: 'X5 M', brand_id: 6, createdAt: new Date(), updatedAt: new Date() },
       { id: 176, name: 'X6 M', brand_id: 6, createdAt: new Date(), updatedAt: new Date() },
-      { id: 177, name: 'X7 M50i', brand_id: 6, createdAt: new Date(), updatedAt: new Date() },
-      { id: 178, name: 'X5 M50i', brand_id: 6, createdAt: new Date(), updatedAt: new Date() },
+      { id: 177, name: '640 I', brand_id: 6, createdAt: new Date(), updatedAt: new Date() },
+      { id: 178, name: 'M235 XI', brand_id: 6, createdAt: new Date(), updatedAt: new Date() },
       { id: 179, name: 'X3 M40i', brand_id: 6, createdAt: new Date(), updatedAt: new Date() },
       { id: 180, name: 'X4 M40i', brand_id: 6, createdAt: new Date(), updatedAt: new Date() },
       // Mercedes-Benz
