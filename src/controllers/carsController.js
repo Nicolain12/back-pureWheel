@@ -73,7 +73,6 @@ module.exports = {
 
             response.info.total = validBrandsWithCars.length;
             response.data = validBrandsWithCars;
-            console.log(response.data);
             res.json(response);
         }
         catch (e) {

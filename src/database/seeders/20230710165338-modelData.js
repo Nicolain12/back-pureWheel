@@ -587,8 +587,8 @@ module.exports = {
       { id: 548, name: 'Type 57', brand_id: 33, createdAt: new Date(), updatedAt: new Date() },
       { id: 549, name: 'Type 55', brand_id: 33, createdAt: new Date(), updatedAt: new Date() },
       { id: 550, name: 'La Voiture Noire', brand_id: 33, createdAt: new Date(), updatedAt: new Date() },
-      // Bugatti
-      { id: 542, name: '3500', brand_id: 34, createdAt: new Date(), updatedAt: new Date() },
+      // Ram
+      { id: 551, name: '3500', brand_id: 34, createdAt: new Date(), updatedAt: new Date() },
     ]);
   },
 
