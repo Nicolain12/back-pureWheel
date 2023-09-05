@@ -186,8 +186,8 @@ module.exports = {
       { id: 174, name: 'X4 M', brand_id: 6, createdAt: new Date(), updatedAt: new Date() },
       { id: 175, name: 'X5 M', brand_id: 6, createdAt: new Date(), updatedAt: new Date() },
       { id: 176, name: 'X6 M', brand_id: 6, createdAt: new Date(), updatedAt: new Date() },
-      { id: 177, name: 'X7 M50i', brand_id: 6, createdAt: new Date(), updatedAt: new Date() },
-      { id: 178, name: 'X5 M50i', brand_id: 6, createdAt: new Date(), updatedAt: new Date() },
+      { id: 177, name: '640 I', brand_id: 6, createdAt: new Date(), updatedAt: new Date() },
+      { id: 178, name: 'M235 XI', brand_id: 6, createdAt: new Date(), updatedAt: new Date() },
       { id: 179, name: 'X3 M40i', brand_id: 6, createdAt: new Date(), updatedAt: new Date() },
       { id: 180, name: 'X4 M40i', brand_id: 6, createdAt: new Date(), updatedAt: new Date() },
       // Mercedes-Benz
@@ -587,8 +587,8 @@ module.exports = {
       { id: 548, name: 'Type 57', brand_id: 33, createdAt: new Date(), updatedAt: new Date() },
       { id: 549, name: 'Type 55', brand_id: 33, createdAt: new Date(), updatedAt: new Date() },
       { id: 550, name: 'La Voiture Noire', brand_id: 33, createdAt: new Date(), updatedAt: new Date() },
-      // Bugatti
-      { id: 542, name: '3500', brand_id: 34, createdAt: new Date(), updatedAt: new Date() },
+      // Ram
+      { id: 551, name: '3500', brand_id: 34, createdAt: new Date(), updatedAt: new Date() },
     ]);
   },
 
