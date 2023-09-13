@@ -61,11 +61,17 @@ module.exports = {
             const brands = await Brands.findAll();
 
             const brandsWithCarsPromises = brands.map(async (brand) => {
-                const response = await axios.get(`http://localhost:3000/cars/brands/${brand.id}`);
-                if (response.data.info.cars > 0) {
-                    return brand.dataValues;
+                try {
+                    const response = await axios.get(`http://localhost:3000/cars/brands/${brand.id}`);
+                    console.log('Response for brand', brand.id, ':', response.data);
+                    if (response.data.info.carsIncluded.length > 0) {
+                        return brand.dataValues;
+                    }
+                    return null;
+                } catch (error) {
+                    console.error(`Error fetching data for brand ${brand.id}: ${error.message}`);
+                    return null;
                 }
-                return null;
             });
 
             const brandsWithCars = await Promise.all(brandsWithCarsPromises);
@@ -88,6 +94,7 @@ module.exports = {
             }
         }
         try {
+            console.log(brandParam);
             const models = await Models.findAll({
                 include: [{ association: 'brand' }]
             })
@@ -137,10 +144,11 @@ module.exports = {
                     where: { brand_id: brand.dataValues.id },
                     include: [{ association: 'model' }]
                 });
-                if (carsIncluded) {
-                    response.info.cars = carsIncluded.length
-                    response.info.carsIncluded = carsIncluded
-                }
+                const modelsIncluded = await Models.findAll({
+                    where: { brand_id: brand.dataValues.id }
+                });
+                if (carsIncluded) response.info.carsIncluded = carsIncluded
+                if (modelsIncluded) response.info.models = modelsIncluded;
                 res.json(response)
             } else res.status(404).json({ status: 404, error: 'Brand not found' })
         }
@@ -479,7 +487,7 @@ module.exports = {
             });
             const carArr = favss.map(async (element) => {
                 const carInfo = await Cars.findByPk(element.dataValues.car_id)
-                if(carInfo){
+                if (carInfo) {
                     return carInfo.dataValues;
                 }
                 return null;
@@ -506,8 +514,8 @@ module.exports = {
             }
         }
         try {
-            const addFav = await Favss.create({user_id: req.params.id, car_id: req.body.car_id})
-            if(addFav){
+            const addFav = await Favss.create({ user_id: req.params.id, car_id: req.body.car_id })
+            if (addFav) {
                 response.data = addFav
                 return res.json(response)
             }
@@ -525,13 +533,13 @@ module.exports = {
             }
         }
         try {
-              const rmvFav = await Favss.destroy({
+            const rmvFav = await Favss.destroy({
                 where: {
-                  user_id: req.params.id,
-                  car_id: req.body.car_id,
+                    user_id: req.params.id,
+                    car_id: req.body.car_id,
                 },
-              })
-            if(rmvFav){
+            })
+            if (rmvFav) {
                 response.data = rmvFav
                 return res.json(response)
             }
