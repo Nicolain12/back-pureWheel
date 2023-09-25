@@ -22,6 +22,14 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'carModel_id',
         as: 'model',
       });
+      Car.belongsTo(models.Version, {
+        foreignKey: 'version_id',
+        as: 'version',
+      });
+      Car.belongsTo(models.Chassis, {
+        foreignKey: 'chassis_id',
+        as: 'chassis',
+      });
        
     }
   }
@@ -70,6 +78,30 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: true
     },
+    engine: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    gas: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    transmission: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    doors: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    chassis_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    version_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'Car',
