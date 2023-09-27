@@ -6,6 +6,7 @@ const Cars = db.Car
 const Brands = db.Brand
 const Models = db.CarModel
 const Favss = db.Fav
+const BodyCar = db.BodyCar
 
 module.exports = {
     carsByUser: async (id) => {
@@ -108,6 +109,25 @@ module.exports = {
             res.json(response)
         }
     },
+    bodyCarList: async (req, res) => {
+        let response = {
+            info: {
+                status: 200,
+            }
+        }
+        try {
+            const bodyCars = await BodyCar.findAll()
+            response.info.total = bodyCars.length
+            response.data = bodyCars
+            res.json(response)
+        }
+        catch (e) {
+            response.info.status = 400
+            response.info.msg = e.message
+            res.json(response)
+        }
+    },
+    
     //ByPk
     carByPk: async (req, res) => {
         let response = {

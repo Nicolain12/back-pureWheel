@@ -4,10 +4,10 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return Promise.all([
-      queryInterface.addColumn('cars', 'chassis_id', {
+      queryInterface.addColumn('cars', 'bodyCar_id', {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Chasses', 
+          model: 'BodyCars', 
           key: 'id', 
         },
         onUpdate: 'RESTRICT',
@@ -30,7 +30,7 @@ module.exports = {
   },
   down: (queryInterface, Sequelize) => {
     return Promise.all([
-      queryInterface.removeColumn('cars', 'chassis_id'),
+      queryInterface.removeColumn('cars', 'bodyCar_id'),
       queryInterface.removeColumn('cars', 'version_id'),
       queryInterface.removeColumn('cars', 'engine'),
       queryInterface.removeColumn('cars', 'gas'),
