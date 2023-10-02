@@ -26,9 +26,9 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'version_id',
         as: 'version',
       });
-      Car.belongsTo(models.Chassis, {
-        foreignKey: 'chassis_id',
-        as: 'chassis',
+      Car.belongsTo(models.BodyCar, {
+        foreignKey: 'bodyCar_id',
+        as: 'bodyCar',
       });
        
     }
@@ -94,7 +94,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    chassis_id: {
+    bodyCar_id: {
       type: DataTypes.INTEGER,
       allowNull: false
     },

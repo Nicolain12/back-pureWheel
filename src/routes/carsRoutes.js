@@ -54,6 +54,8 @@ router.get('/', carsAPI.carsList)
 router.get('/brands', carsAPI.brandsList)
 //Models
 router.get('/models', carsAPI.modelsList)
+//Chassis
+router.get('/chassis', carsAPI.bodyCarList)
 //************* Data By Id ************* 
 // Car
 router.get('/:id', carsAPI.carByPk)
