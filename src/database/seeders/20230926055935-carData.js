@@ -67,6 +67,8 @@ module.exports = {
         color: 'Black',
         description: '8.0-liter 16-cylinder powerplant. four turbochargers that generate 1500 horsepower and 1180 pound-feet of torque.',
         price: 3000000,
+        createdAt: new Date(),
+        updatedAt: new Date(),
         bodyCar_id: 3,
         engine: '8.0L quad-turbocharged W16',
         gas:'Premium gasoline',
