@@ -40,7 +40,7 @@ module.exports = {
         }
         try {
             const cars = await Cars.findAll({
-                include: [{ association: 'brand' }, { association: 'model' }]
+                include: [{ association: 'brand' }, { association: 'model' }, { association: 'bodyCar' }]
             })
             response.info.total = cars.length
             response.data = cars
