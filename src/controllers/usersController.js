@@ -63,6 +63,7 @@ module.exports = {
                 phoneNumber: req.body.phoneNumber,
                 password: bcrypt.hashSync(req.body.password, 10),
             }
+            console.log(user);
             const errorRegister = []
             const users = await Users.findAll()
             users.forEach(element => {

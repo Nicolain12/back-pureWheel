@@ -15,6 +15,7 @@ module.exports = {
         color: 'White',
         description: 'INTERIOR COLOR: Black w/ red stitching | ENGINE: V10',
         price: 253777,
+        bodyCar_id: 3,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

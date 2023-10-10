@@ -64,7 +64,6 @@ module.exports = {
             const brandsWithCarsPromises = brands.map(async (brand) => {
                 try {
                     const response = await axios.get(`http://localhost:3000/cars/brands/${brand.id}`);
-                    console.log('Response for brand', brand.id, ':', response.data);
                     if (response.data.info.carsIncluded.length > 0) {
                         return brand.dataValues;
                     }
@@ -95,7 +94,6 @@ module.exports = {
             }
         }
         try {
-            console.log(brandParam);
             const models = await Models.findAll({
                 include: [{ association: 'brand' }]
             })
@@ -516,7 +514,6 @@ module.exports = {
             const carsList = await Promise.all(carArr);
             const validCarList = carsList.filter(brand => brand !== null);
 
-            console.log(validCarList);
             response.info.total = validCarList.length
             response.data = validCarList
             res.json(response)
