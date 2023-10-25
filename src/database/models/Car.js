@@ -30,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'bodyCar_id',
         as: 'bodyCar',
       });
+      Car.belongsTo(models.Color, {
+        foreignKey: 'color_id',
+        as: 'color',
+      });
        
     }
   }
@@ -56,10 +60,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     km:{
       type: DataTypes.BIGINT,
-      allowNull: false
-    },
-    color: {
-      type: DataTypes.STRING,
       allowNull: false
     },
     description:{
@@ -99,6 +99,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     version_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    color_id: {
       type: DataTypes.INTEGER,
       allowNull: false
     }

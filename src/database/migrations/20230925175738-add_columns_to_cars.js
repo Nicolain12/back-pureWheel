@@ -11,16 +11,16 @@ module.exports = {
           key: 'id', 
         },
         onUpdate: 'RESTRICT',
-        onDelete: 'RESTRICT', // You can choose the onDelete behavior that suits your needs
+        onDelete: 'RESTRICT',
       }),
       queryInterface.addColumn('cars', 'version_id', {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Versions', // Replace 'Versions' with the actual name of the referenced table
-          key: 'id', // Replace 'id' with the actual name of the referenced column
+          model: 'Versions',
+          key: 'id',
         },
         onUpdate: 'RESTRICT',
-        onDelete: 'RESTRICT', // You can choose the onDelete behavior that suits your needs
+        onDelete: 'RESTRICT',
       }),
       queryInterface.addColumn('cars', 'engine', Sequelize.STRING),
       queryInterface.addColumn('cars', 'gas', Sequelize.STRING),
