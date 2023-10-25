@@ -7,6 +7,8 @@ const Brands = db.Brand
 const Models = db.CarModel
 const Favss = db.Fav
 const BodyCar = db.BodyCar
+const Version = db.Version
+const Color = db.Color
 
 module.exports = {
     carsByUser: async (id) => {
@@ -40,7 +42,7 @@ module.exports = {
         }
         try {
             const cars = await Cars.findAll({
-                include: [{ association: 'brand' }, { association: 'model' }, { association: 'bodyCar' }]
+                include: [{ association: 'brand' }, { association: 'model' }, { association: 'bodyCar' }, { association: 'color' }]
             })
             response.info.total = cars.length
             response.data = cars
@@ -125,7 +127,43 @@ module.exports = {
             res.json(response)
         }
     },
-    
+    versionList: async (req, res) => {
+        let response = {
+            info: {
+                status: 200,
+            }
+        }
+        try {
+            const version = await Version.findAll()
+            response.info.total = version.length
+            response.data = version
+            res.json(response)
+        }
+        catch (e) {
+            response.info.status = 400
+            response.info.msg = e.message
+            res.json(response)
+        }
+    },
+    colorList: async (req, res) => {
+        let response = {
+            info: {
+                status: 200,
+            }
+        }
+        try {
+            const color = await Color.findAll()
+            response.info.total = color.length
+            response.data = color
+            res.json(response)
+        }
+        catch (e) {
+            response.info.status = 400
+            response.info.msg = e.message
+            res.json(response)
+        }
+    },
+
     //ByPk
     carByPk: async (req, res) => {
         let response = {
@@ -135,7 +173,7 @@ module.exports = {
         }
         try {
             const car = await Cars.findByPk(req.params.id, {
-                include: [{ association: 'brand' }, { association: 'model' }]
+                include: [{ association: 'brand' }, { association: 'model' }, { association: 'bodyCar' }, { association: 'color' }]
             })
             if (car) {
                 response.data = car
@@ -204,6 +242,9 @@ module.exports = {
             res.json(response)
         }
     },
+    //Version
+    //color
+
     //Create
     createCar: async (req, res) => {
         let response = {
@@ -283,6 +324,9 @@ module.exports = {
         }
 
     },
+    //Version
+    //color
+
     //Update
     updateCar: async (req, res) => {
         let response = {
@@ -421,6 +465,9 @@ module.exports = {
             res.json(response)
         }
     },
+    //Version
+    //color
+
     //Delete
     deleteCar: async (req, res) => {
         let response = {
@@ -492,6 +539,10 @@ module.exports = {
             res.json(response)
         }
     },
+    //Version
+    //color
+
+    // Favorites
     // Get Favss By id
     userFavss: async (req, res) => {
         let response = {
