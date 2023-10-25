@@ -56,6 +56,10 @@ router.get('/brands', carsAPI.brandsList)
 router.get('/models', carsAPI.modelsList)
 //Chassis
 router.get('/chassis', carsAPI.bodyCarList)
+//Version
+router.get('/versions', carsAPI.versionList)
+//Color
+router.get('/colors', carsAPI.colorList)
 //************* Data By Id ************* 
 // Car
 router.get('/:id', carsAPI.carByPk)
@@ -63,6 +67,11 @@ router.get('/:id', carsAPI.carByPk)
 router.get('/brands/:id', carsAPI.brandByPk)
 //Model
 router.get('/models/:id', carsAPI.modelByPk)
+//Version
+// router.get('/models/:id', carsAPI.modelByPk)
+//color
+// router.get('/models/:id', carsAPI.modelByPk)
+
 //************* Create ************* 
 // Car
 router.post('/create', uploadCar.array('productFiles'), carsAPI.createCar)
@@ -70,18 +79,35 @@ router.post('/create', uploadCar.array('productFiles'), carsAPI.createCar)
 router.post('/brands/create', uploadBrand.fields([{ name: 'logo', maxCount: 1 }, { name: 'banner', maxCount: 1 }]), carsAPI.createBrand);
 //Model
 router.post('/models/create', carsAPI.createModel)
+//Version
+// router.post('/models/create', carsAPI.createModel)
+//color
+// router.post('/models/create', carsAPI.createModel)
+
 //************* Update ************* 
+// Car
 router.put('/update/:id', uploadCar.array('productFiles'), carsAPI.updateCar)
 // Brand
 router.put('/brands/update/:id', uploadBrand.fields([{ name: 'logo', maxCount: 1 }, { name: 'banner', maxCount: 1 }]), carsAPI.updateBrand);
 //Model
 router.put('/models/update/:id', carsAPI.updateModel)
+//Version
+// router.put('/models/update/:id', carsAPI.updateModel)
+//color
+// router.put('/models/update/:id', carsAPI.updateModel)
+
 //************* Delete ************* 
+// Car
 router.delete('/delete/:id', carsAPI.deleteCar)
 // Brand
 router.delete('/brands/delete/:id', carsAPI.deleteBrand)
 //Model
 router.delete('/models/delete/:id', carsAPI.deleteModel)
+//Version
+// router.delete('/models/delete/:id', carsAPI.deleteModel)
+//color
+// router.delete('/models/delete/:id', carsAPI.deleteModel)
+
 //************* Other ************* 
 // Get Favss By id
 router.get('/favss/:id', carsAPI.userFavss)
