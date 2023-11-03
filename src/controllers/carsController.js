@@ -2,6 +2,7 @@ const db = require('../database/models')
 const axios = require('axios');
 const PORT = require('../app')
 const fs = require('fs');
+const { error } = require('console');
 const Cars = db.Car
 const Brands = db.Brand
 const Models = db.CarModel
@@ -582,10 +583,26 @@ module.exports = {
             }
         }
         try {
-            const addFav = await Favss.create({ user_id: req.params.id, car_id: req.body.car_id })
+            const favss = await Favss.findAll({
+                where: { user_id: req.params.id }
+            });
+
+        
+            const favsFilter = favss.filter((car)=> car.id === req.body.car_id)    
+            
+            
+            console.log(favss)
+            console.log(favsFilter)
+
+
+            if (favsFilter.length = 0) {
+                const addFav = await Favss.create({ user_id: req.params.id, car_id: req.body.car_id })
             if (addFav) {
                 response.data = addFav
                 return res.json(response)
+            }
+            } else {
+                throw new Error("is already fav")
             }
         } catch (e) {
             response.info.status = 400

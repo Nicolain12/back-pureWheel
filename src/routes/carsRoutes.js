@@ -109,8 +109,10 @@ router.delete('/models/delete/:id', carsAPI.deleteModel)
 // router.delete('/models/delete/:id', carsAPI.deleteModel)
 
 //************* Other ************* 
-// Get Favss By id
+// Get All Favss by user id
 router.get('/favss/:id', carsAPI.userFavss)
+// // Get Favss By car id
+// router.get('/favss/:id', carsAPI.userFavss)
 // Add Car To Favss 
 router.post('/favss/add/:id', carsAPI.userFavssAdd)
 // Remove Car From Favss 
