@@ -2,11 +2,9 @@ const db = require('../database/models')
 const axios = require('axios');
 const PORT = require('../app')
 const fs = require('fs');
-const { error } = require('console');
 const Cars = db.Car
 const Brands = db.Brand
 const Models = db.CarModel
-const Favss = db.Fav
 const BodyCar = db.BodyCar
 const Version = db.Version
 const Color = db.Color
@@ -256,16 +254,22 @@ module.exports = {
         try {
             const newCar = {
                 images: JSON.stringify(req.files.map((file) => file.filename)),
-                year: req.body.year,
-                carModel_id: req.body.carModel_id,
-                brand_id: req.body.brand_id,
+                year: req.body.Year,
+                carModel_id: req.body.Model,
+                brand_id: req.body.Brand,
                 user_id: req.token.finded.id,
-                km: req.body.km,
-                color: req.body.color,
-                description: req.body.description,
-                price: req.body.price,
-                damage: req.body.damage,
-                onSale: req.body.onSale
+                km: req.body.Kilometers,
+                color_id: req.body.Color,
+                description: req.body.Description,
+                price: req.body.Price,
+                damage: req.body.Damage,
+                onSale: req.body.Discount,
+                doors: 2,
+                bodyCar_id: req.body.BodyCar,
+                transmission: req.body.Transmission,
+                version_id: req.body.Version,
+                gas: req.body.Gasoline,
+                engine: req.body.Engine
             }
             if (newCar.onSale) newCar.price = newCar.price - (newCar.price * newCar.onSale / 100)
             const addingCar = await Cars.create(newCar)
@@ -542,97 +546,4 @@ module.exports = {
     },
     //Version
     //color
-
-    // Favorites
-    // Get Favss By id
-    userFavss: async (req, res) => {
-        let response = {
-            info: {
-                status: 200
-            }
-        }
-        try {
-            const favss = await Favss.findAll({
-                where: { user_id: req.params.id }
-            });
-            const carArr = favss.map(async (element) => {
-                const carInfo = await Cars.findByPk(element.dataValues.car_id)
-                if (carInfo) {
-                    return carInfo.dataValues;
-                }
-                return null;
-            })
-
-            const carsList = await Promise.all(carArr);
-            const validCarList = carsList.filter(brand => brand !== null);
-
-            response.info.total = validCarList.length
-            response.data = validCarList
-            res.json(response)
-        } catch (e) {
-            response.info.status = 400
-            response.info.msg = e.message
-            res.json(response)
-        }
-    },
-    // Add Car To Favss 
-    userFavssAdd: async (req, res) => {
-        let response = {
-            info: {
-                status: 200
-            }
-        }
-        try {
-            const favss = await Favss.findAll({
-                where: { user_id: req.params.id }
-            });
-
-        
-            const favsFilter = favss.filter((car)=> car.id === req.body.car_id)    
-            
-            
-            console.log(favss)
-            console.log(favsFilter)
-
-
-            if (favsFilter.length = 0) {
-                const addFav = await Favss.create({ user_id: req.params.id, car_id: req.body.car_id })
-            if (addFav) {
-                response.data = addFav
-                return res.json(response)
-            }
-            } else {
-                throw new Error("is already fav")
-            }
-        } catch (e) {
-            response.info.status = 400
-            response.info.msg = e.message
-            res.json(response)
-        }
-    },
-    // Remove Car From Favss 
-    userFavssRemove: async (req, res) => {
-        let response = {
-            info: {
-                status: 200
-            }
-        }
-        try {
-            const rmvFav = await Favss.destroy({
-                where: {
-                    user_id: req.params.id,
-                    car_id: req.body.car_id,
-                },
-            })
-            if (rmvFav) {
-                response.data = rmvFav
-                return res.json(response)
-            }
-
-        } catch (e) {
-            response.info.status = 400
-            response.info.msg = e.message
-            res.json(response)
-        }
-    }
 }

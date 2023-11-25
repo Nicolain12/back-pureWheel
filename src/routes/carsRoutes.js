@@ -5,6 +5,7 @@ const multer = require('multer')
 const path = require('path');
 const carsAPI = require('../controllers/carsController')
 const auth = require('../middlewares/authentication.js')
+const authAdmin = require('../middlewares/adminAuth.js')
 //MULTER
 //car
 const storageCar = multer.diskStorage({
@@ -74,7 +75,7 @@ router.get('/models/:id', carsAPI.modelByPk)
 
 //************* Create ************* 
 // Car
-router.post('/create', uploadCar.array('productFiles'), carsAPI.createCar)
+router.post('/create', authAdmin, uploadCar.array('productFiles'), carsAPI.createCar)
 // Brand
 router.post('/brands/create', uploadBrand.fields([{ name: 'logo', maxCount: 1 }, { name: 'banner', maxCount: 1 }]), carsAPI.createBrand);
 //Model
@@ -107,16 +108,6 @@ router.delete('/models/delete/:id', carsAPI.deleteModel)
 // router.delete('/models/delete/:id', carsAPI.deleteModel)
 //color
 // router.delete('/models/delete/:id', carsAPI.deleteModel)
-
-//************* Other ************* 
-// Get All Favss by user id
-router.get('/favss/:id', carsAPI.userFavss)
-// // Get Favss By car id
-// router.get('/favss/:id', carsAPI.userFavss)
-// Add Car To Favss 
-router.post('/favss/add/:id', carsAPI.userFavssAdd)
-// Remove Car From Favss 
-router.delete('/favss/remove/:id', carsAPI.userFavssRemove)
 
 module.exports = router
 
