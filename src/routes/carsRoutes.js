@@ -87,7 +87,7 @@ router.post('/models/create', carsAPI.createModel)
 
 //************* Update ************* 
 // Car
-router.put('/update/:id', uploadCar.array('productFiles'), carsAPI.updateCar)
+router.put('/update/:id', authAdmin, uploadCar.array('productFiles'), carsAPI.updateCar)
 // Brand
 router.put('/brands/update/:id', uploadBrand.fields([{ name: 'logo', maxCount: 1 }, { name: 'banner', maxCount: 1 }]), carsAPI.updateBrand);
 //Model

@@ -343,12 +343,22 @@ module.exports = {
             const oldImgs = JSON.parse(req.body.oldImages)
             const rmvImgs = JSON.parse(req.body.removeImages)
             const newCar = {
-                km: req.body.km,
-                color: req.body.color,
-                description: req.body.description,
-                price: req.body.price,
-                damage: req.body.damage,
-                onSale: req.body.onSale,
+                year: req.body.Year,
+                carModel_id: req.body.Model,
+                brand_id: req.body.Brand,
+                user_id: req.token.finded.id,
+                km: req.body.Kilometers,
+                color_id: req.body.Color,
+                description: req.body.Description,
+                price: req.body.Price,
+                damage: req.body.Damage,
+                onSale: req.body.Discount,
+                doors: 2,
+                bodyCar_id: req.body.BodyCar,
+                transmission: req.body.Transmission,
+                version_id: req.body.Version,
+                gas: req.body.Gasoline,
+                engine: req.body.Engine
             }
             if (newCar.onSale) newCar.price = newCar.price - (newCar.price * newCar.onSale / 100)
             if (oldImgs) {
