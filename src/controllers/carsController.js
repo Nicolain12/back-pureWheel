@@ -340,8 +340,12 @@ module.exports = {
             }
         }
         try {
-            const oldImgs = JSON.parse(req.body.oldImages)
-            const rmvImgs = JSON.parse(req.body.removeImages)
+            console.log('--------------------------------------');
+            console.log('Controller Working');
+            console.log(`TOKEN: ${JSON.stringify(req.token.finded)}`);
+            const oldImgs = req.body.oldImages
+            const rmvImgs = req.body.removeImages
+            console.log(req.body.removeImages);
             const newCar = {
                 year: req.body.Year,
                 carModel_id: req.body.Model,
@@ -360,30 +364,55 @@ module.exports = {
                 gas: req.body.Gasoline,
                 engine: req.body.Engine
             }
+            console.log(newCar);
             if (newCar.onSale) newCar.price = newCar.price - (newCar.price * newCar.onSale / 100)
+            // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
             if (oldImgs) {
                 const newCarImg = []
-                oldImgs.forEach(element => {
-                    newCarImg.push(element)
-                });
-                if (req.files) {
-                    req.files.forEach(file => {
-                        newCarImg.push(file.filename)
+                if (typeof oldImgs === 'object') {
+                    oldImgs.forEach(element => {
+                        newCarImg.push(element)
                     });
+                    if (req.files) {
+                        req.files.forEach(file => {
+                            newCarImg.push(file.filename)
+                        });
+                    }
+                    newCar.image = JSON.stringify(newCarImg)
                 }
-                newCar.images = JSON.stringify(newCarImg)
+                if (typeof oldImgs === 'string') {
+                    newCarImg.push(oldImgs)
+                    if (req.files) {
+                        req.files.forEach(file => {
+                            newCarImg.push(file.filename)
+                        });
+                    }
+                    newCar.image = JSON.stringify(newCarImg)
+                }
             } else {
                 newCar.image = JSON.stringify(req.files.map((file) => file.filename))
             }
+            // The udate eliminates the rmvImg but doesnt update the database so the client still look for the remove one and not the new one
+            // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
             if (rmvImgs) {
-                rmvImgs.forEach(element => {
-                    fs.unlink(`public/images/cars/user_${req.token.finded.id}/${element}`, (err) => {
+                if (typeof rmvImgs === 'object') {
+                    rmvImgs.forEach(element => {
+                        fs.unlink(`public/images/cars/user_${req.token.finded.id}/${element}`, (err) => {
+                            if (err) {
+                                console.error(err);
+                            }
+                        });
+                    });
+                }
+                if (typeof rmvImgs === 'string') {
+                    fs.unlink(`public/images/cars/user_${req.token.finded.id}/${rmvImgs}`, (err) => {
                         if (err) {
                             console.error(err);
                         }
                     });
-                });
+                }
             }
+            // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
             await Cars.update(newCar, { where: { id: req.params.id } })
             const car = await Cars.findByPk(req.params.id, {
                 include: [{ association: 'brand' }, { association: 'model' }]
@@ -491,11 +520,22 @@ module.exports = {
             }
         }
         try {
+            const car = await Cars.findByPk(req.params.id, {
+                include: [{ association: 'brand' }, { association: 'model' }, { association: 'bodyCar' }, { association: 'color' }]
+            })
+            JSON.parse(car.dataValues.images).forEach(element => {
+                fs.unlink(`public/images/cars/user_${req.token.finded.id}/${element}`, (err) => {
+                    if (err) {
+                        console.error(err);
+                    }
+                });
+            });
             const destroy = await Cars.destroy({
                 where: {
                     id: req.params.id
                 }
             })
+            
             response.data = destroy
             res.json(response)
 

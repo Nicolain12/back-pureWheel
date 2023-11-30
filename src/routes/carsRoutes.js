@@ -99,7 +99,7 @@ router.put('/models/update/:id', carsAPI.updateModel)
 
 //************* Delete ************* 
 // Car
-router.delete('/delete/:id', carsAPI.deleteCar)
+router.delete('/delete/:id', authAdmin, carsAPI.deleteCar)
 // Brand
 router.delete('/brands/delete/:id', carsAPI.deleteBrand)
 //Model
