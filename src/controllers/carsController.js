@@ -340,12 +340,8 @@ module.exports = {
             }
         }
         try {
-            console.log('--------------------------------------');
-            console.log('Controller Working');
-            console.log(`TOKEN: ${JSON.stringify(req.token.finded)}`);
             const oldImgs = req.body.oldImages
             const rmvImgs = req.body.removeImages
-            console.log(req.body.removeImages);
             const newCar = {
                 year: req.body.Year,
                 carModel_id: req.body.Model,
@@ -364,9 +360,7 @@ module.exports = {
                 gas: req.body.Gasoline,
                 engine: req.body.Engine
             }
-            console.log(newCar);
             if (newCar.onSale) newCar.price = newCar.price - (newCar.price * newCar.onSale / 100)
-            // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
             if (oldImgs) {
                 const newCarImg = []
                 if (typeof oldImgs === 'object') {
@@ -387,13 +381,11 @@ module.exports = {
                             newCarImg.push(file.filename)
                         });
                     }
-                    newCar.image = JSON.stringify(newCarImg)
+                    newCar.images = JSON.stringify(newCarImg)
                 }
             } else {
-                newCar.image = JSON.stringify(req.files.map((file) => file.filename))
+                newCar.images = JSON.stringify(req.files.map((file) => file.filename))
             }
-            // The udate eliminates the rmvImg but doesnt update the database so the client still look for the remove one and not the new one
-            // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
             if (rmvImgs) {
                 if (typeof rmvImgs === 'object') {
                     rmvImgs.forEach(element => {
@@ -412,7 +404,6 @@ module.exports = {
                     });
                 }
             }
-            // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
             await Cars.update(newCar, { where: { id: req.params.id } })
             const car = await Cars.findByPk(req.params.id, {
                 include: [{ association: 'brand' }, { association: 'model' }]
