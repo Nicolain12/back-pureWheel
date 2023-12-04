@@ -133,7 +133,7 @@ module.exports = {
             }
         }
         try {
-            const version = await Version.findAll()
+            const version = await Version.findAll({include: [{ association: 'model' }]})
             response.info.total = version.length
             response.data = version
             res.json(response)
@@ -241,8 +241,46 @@ module.exports = {
             res.json(response)
         }
     },
-    //Version
-    //color
+    versionByPk: async (req, res) => {
+        let response = {
+            info: {
+                status: 200,
+            }
+        }
+        try {
+            const version = await Version.findByPk(req.params.id, {
+                include: [{ association: 'model' }]
+            })
+            if (version) {
+                response.data = version
+                res.json(response)
+            } else res.status(404).json({ status: 404, error: 'Version not found' })
+        }
+        catch (e) {
+            response.info.status = 400
+            response.info.msg = e.message
+            res.json(response)
+        }
+    },
+    colorByPk: async (req, res) => {
+        let response = {
+            info: {
+                status: 200,
+            }
+        }
+        try {
+            const color = await Color.findByPk(req.params.id)
+            if (color) {
+                response.data = color
+                res.json(response)
+            } else res.status(404).json({ status: 404, error: 'Color not found' })
+        }
+        catch (e) {
+            response.info.status = 400
+            response.info.msg = e.message
+            res.json(response)
+        }
+    },
 
     //Create
     createCar: async (req, res) => {
@@ -329,8 +367,48 @@ module.exports = {
         }
 
     },
-    //Version
-    //color
+    createVersion: async (req, res) => {
+        let response = {
+            info: {
+                status: 200,
+            }
+        }
+        try {
+            const newVersion = {
+                name: req.body.name,
+                model_id: req.body.model_id
+            }
+            const addingVersion = await Version.create(newVersion)
+            response.data = addingVersion
+            res.json(response)
+        }
+        catch (e) {
+            response.info.status = 400
+            response.info.msg = e.message
+            res.json(response)
+        }
+    },
+    createColor: async (req, res) => {
+        let response = {
+            info: {
+                status: 200,
+            }
+        }
+        try {
+            const newColor = {
+                name: req.body.name,
+                code: req.body.code
+            }
+            const addingColor = await Color.create(newColor)
+            response.data = addingColor
+            res.json(response)
+        }
+        catch (e) {
+            response.info.status = 400
+            response.info.msg = e.message
+            res.json(response)
+        }
+    },
 
     //Update
     updateCar: async (req, res) => {
@@ -585,6 +663,48 @@ module.exports = {
             res.json(response)
         }
     },
-    //Version
-    //color
+    deleteVersion: async (req, res) => {
+        let response = {
+            info: {
+                status: 200
+            }
+        }
+        try {
+            const destroy = await Version.destroy({
+                where: {
+                    id: req.params.id
+                }
+            })
+            response.data = destroy
+            res.json(response)
+
+
+        } catch (e) {
+            response.info.status = 400
+            response.info.msg = e.message
+            res.json(response)
+        }
+    },
+    deleteColor: async (req, res) => {
+        let response = {
+            info: {
+                status: 200
+            }
+        }
+        try {
+            const destroy = await Color.destroy({
+                where: {
+                    id: req.params.id
+                }
+            })
+            response.data = destroy
+            res.json(response)
+
+
+        } catch (e) {
+            response.info.status = 400
+            response.info.msg = e.message
+            res.json(response)
+        }
+    },
 }
