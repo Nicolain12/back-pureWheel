@@ -1,6 +1,6 @@
 const db = require('../database/models')
 const axios = require('axios');
-const PORT = require('../app')
+const {PORT} = require('../modules/mainModules')
 const fs = require('fs');
 const Cars = db.Car
 const Brands = db.Brand
@@ -41,7 +41,7 @@ module.exports = {
         }
         try {
             const cars = await Cars.findAll({
-                include: [{ association: 'brand' }, { association: 'model' }, { association: 'bodyCar' }, { association: 'color' }]
+                include: [{ association: 'brand' }, { association: 'model' }, { association: 'bodyCar' }, { association: 'color' }, { association: 'version' }]
             })
             response.info.total = cars.length
             response.data = cars
@@ -61,10 +61,10 @@ module.exports = {
         }
         try {
             const brands = await Brands.findAll();
-
+            
             const brandsWithCarsPromises = brands.map(async (brand) => {
                 try {
-                    const response = await axios.get(`http://localhost:3000/cars/brands/${brand.id}`);
+                    const response = await axios.get(`http://localhost:${PORT}/cars/brands/${brand.id}`);
                     if (response.data.info.carsIncluded.length > 0) {
                         return brand.dataValues;
                     }
@@ -74,10 +74,10 @@ module.exports = {
                     return null;
                 }
             });
-
+            
             const brandsWithCars = await Promise.all(brandsWithCarsPromises);
             const validBrandsWithCars = brandsWithCars.filter(brand => brand !== null);
-
+            
             response.info.total = validBrandsWithCars.length;
             response.data = validBrandsWithCars;
             res.json(response);
@@ -172,7 +172,7 @@ module.exports = {
         }
         try {
             const car = await Cars.findByPk(req.params.id, {
-                include: [{ association: 'brand' }, { association: 'model' }, { association: 'bodyCar' }, { association: 'color' }]
+                include: [{ association: 'brand' }, { association: 'model' }, { association: 'bodyCar' }, { association: 'color' }, { association: 'version' }]
             })
             if (car) {
                 response.data = car
@@ -578,8 +578,6 @@ module.exports = {
             res.json(response)
         }
     },
-    //Version
-    //color
 
     //Delete
     deleteCar: async (req, res) => {
