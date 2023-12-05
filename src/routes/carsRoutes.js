@@ -101,9 +101,9 @@ router.delete('/brands/delete/:id', authAdmin, carsAPI.deleteBrand)
 //Model
 router.delete('/models/delete/:id', authAdmin, carsAPI.deleteModel)
 //Version
-router.delete('/versions/delete/:id', carsAPI.deleteVersion)
+router.delete('/versions/delete/:id', authAdmin, carsAPI.deleteVersion)
 //color
-router.delete('/colors/delete/:id', carsAPI.deleteColor)
+router.delete('/colors/delete/:id', authAdmin, carsAPI.deleteColor)
 
 module.exports = router
 

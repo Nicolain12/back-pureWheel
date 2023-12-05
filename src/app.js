@@ -8,7 +8,7 @@ const carsApi = require('./routes/carsRoutes')
 
 app.use(express.json())
 app.use(cors());
-
+app.use(express.urlencoded({ extended: true }));
 const publicPath = path.join(__dirname, '../public')
 app.use(express.static(publicPath))
 
