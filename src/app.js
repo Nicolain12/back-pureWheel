@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path')
-const {PORT} = require('./modules/mainModules')
+const {PORT} = require('./modules/appInfo')
 const cors = require('cors');
 const app = express();
 //routes requires

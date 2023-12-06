@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken')
 const carsController = require('./carsController.js')
 const db = require('../database/models');
 const Users = db.User
+const {validationResult} = require('express-validator');
+const { log } = require('console');
 module.exports = {
     // List
     list: async (req, res) => {
@@ -19,7 +21,7 @@ module.exports = {
             res.json(response)
         }
         catch (e) {
-            response.info.status = 400
+            response.info.status = 500
             response.info.msg = e.message
             res.json(response)
         }
@@ -40,7 +42,7 @@ module.exports = {
             res.json(response)
         }
         catch (e) {
-            response.info.status = 400
+            response.info.status = 500
             console.error(e);
             response.info.msg = e.message
             res.json(response)
@@ -54,6 +56,16 @@ module.exports = {
             }
         }
         try {
+            const errors = validationResult(req);
+
+            if (!errors.isEmpty()) {
+                response.info.status = 422
+                response.info.errors =  {}
+                errors.array().forEach(error => {
+                    response.info.errors[error.path] = {msg: error.msg, currentValue: error.value}
+                })
+              return res.json(response);
+            }
             const user = {
                 image: req.file ? req.file.filename : 'default.jpeg',
                 name: req.body.name,
@@ -88,7 +100,7 @@ module.exports = {
             }
 
         } catch (e) {
-            response.info.status = 400
+            response.info.status = 500
             response.info.msg = e.message
             res.json(response)
         }
@@ -148,7 +160,7 @@ module.exports = {
 
             }
         } catch (e) {
-            response.info.status = 400
+            response.info.status = 500
             response.info.msg = e.message
             res.json(response)
         }
@@ -186,7 +198,7 @@ module.exports = {
 
         } catch (e) {
             console.error(e)
-            response.info.status = 400
+            response.info.status = 500
             response.info.msg = e.message
             res.json(response)
         }
@@ -211,7 +223,7 @@ module.exports = {
 
 
         } catch (e) {
-            response.info.status = 400
+            response.info.status = 500
             response.info.msg = e.message
             res.json(response)
         }
@@ -229,7 +241,7 @@ module.exports = {
             response.data = req.token.finded
             return res.json(response)
         } else {
-            response.info.status = 400
+            response.info.status = 500
             response.info.msg = 'User not found'
             return res.json(response)
         }

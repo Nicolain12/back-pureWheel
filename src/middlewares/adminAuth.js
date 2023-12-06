@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-const { loggin } = require('../controllers/usersController');
+const { adminEmail } = require('../modules/appInfo');
+
 function authorizationToken(req, res, next) {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split('"')[1];
@@ -10,7 +11,7 @@ function authorizationToken(req, res, next) {
   try {
     const decodedToken = jwt.verify(token, 'secretkey'); 
     req.token = decodedToken; 
-    if (decodedToken.finded.email === 'nicolas@mail.com ') {
+    if (decodedToken.finded.email === adminEmail) {
       next(); 
     } else {
       throw new Error('Admin not authorized')
