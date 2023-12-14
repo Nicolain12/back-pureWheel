@@ -2,6 +2,9 @@ const db = require('../database/models')
 const axios = require('axios');
 const {PORT} = require('../modules/appInfo')
 const fs = require('fs');
+const { log } = require('console');
+const { version } = require('os');
+const { versions } = require('process');
 const Cars = db.Car
 const Brands = db.Brand
 const Models = db.CarModel
@@ -133,10 +136,20 @@ module.exports = {
             }
         }
         try {
-            const version = await Version.findAll({include: [{ association: 'model' }]})
-            response.info.total = version.length
-            response.data = version
-            res.json(response)
+            const { model_id } = req.params;
+            if (model_id) {
+                const version = await Version.findAll({
+                    where: { model_id:  model_id},
+                    include: [{ association: 'model' }]
+                });
+                response.data = version
+                res.json(response)
+              } else {
+                  const version = await Version.findAll({include: [{ association: 'model' }]})
+                  response.info.total = version.length
+                  response.data = version
+                  res.json(response)
+              }
         }
         catch (e) {
             response.info.status = 400
@@ -203,7 +216,34 @@ module.exports = {
                     where: { brand_id: brand.dataValues.id }
                 });
                 if (carsIncluded) response.info.carsIncluded = carsIncluded
-                if (modelsIncluded) response.info.models = modelsIncluded;
+                if (modelsIncluded) {
+                    if (modelsIncluded.length > 0) {
+                        const versionsIncluded = modelsIncluded.map(async (model) => {
+                            try {
+                                const responseVersions = await axios.get(`http://localhost:${PORT}/cars/versions/${model.id}`);
+                                if (responseVersions.data.data.length > 0) {
+                                    return responseVersions.data.data;
+                                }
+                                return null;
+                            } catch (error) {
+                                console.error(`Error fetching data for model ${model.id}: ${error.message}`);
+                                return null;
+                            }
+                        });
+            
+                        const versionsFinded = await Promise.all(versionsIncluded);
+                        const versions = versionsFinded.filter(arrVersions =>{
+                            if (arrVersions !== null) {
+                                if (arrVersions.length > 0) {
+                                    return arrVersions
+                                }    
+                            }
+                            return
+                            });
+                        response.info.versions = versions;
+                };
+                response.info.models = modelsIncluded;
+                }
                 res.json(response)
             } else res.status(404).json({ status: 404, error: 'Brand not found' })
         }
